@@ -30,17 +30,17 @@ function Profile() {
           <div className='w-[full]  h-full pl-4'>
              <img src="edit-text.png" alt="" onClick = {()=>navigate("/profile/editIntro")} className='h-[2.6vw] p-2 hover:bg-slate-100 cursor-pointer absolute right-1 top-1 rounded-[50%]' />
             <div className='text-[1.7vw] font-bold '>{userData.user.firstName} {userData.user.lastName}</div>
-            <div>{userData.user.role}</div>
+            <div>{userData.user.role === "student"? `Student at ${ userData.user.education[0].college}`:`Working at ${userData.user?.recruiterProfile?.companyName}`}</div>
             <div>{userData.user.location} <span><Link className='text-blue-500 font-semibold cursor-pointer'>Contact info</Link></span></div>
-            <div>{userData.user.userName}</div>
+            {/* <div>{userData.user.userName}</div> */}
           </div>
-          <div className='w-[50%] h-full  font-semibold text-[1.1vw]'> {userData.user.role === "student"?`Student at${ userData.user.studentProfile.college}`:`Working at ${userData.user.recruiterProfile.companyName}`}</div>
+          <div className='w-[50%] h-full  font-semibold text-[1.1vw]'> {userData.user.role === "student"?`Student at ${ userData.user.education[0].college}`:`Working at ${userData.user?.recruiterProfile?.companyName}`}</div>
           </div>
           <div className='h-[30%] w-[70%] flex flex-row gap-8 pl-4 py-1  mt-1  items-center'>
-            <Link className='border-1 text-blue-500 font-semibold hover:text-blue-600 hover:border-2 hover:bg-blue-100 focus:bg-blue-500 hover:border-blue-600 focus:text-white h-fit w-fit border-blue-500 text-[1vw] px-2 py-1 rounded-[15px]'>Open to</Link>
+            {/* <Link className='border-1 text-blue-500 font-semibold hover:text-blue-600 hover:border-2 hover:bg-blue-100 focus:bg-blue-500 hover:border-blue-600 focus:text-white h-fit w-fit border-blue-500 text-[1vw] px-2 py-1 rounded-[15px]'>Open to</Link> */}
             <Link className='border-1 text-blue-500 font-semibold hover:text-blue-600 hover:border-2 hover:bg-blue-100 focus:bg-blue-500 hover:border-blue-600 focus:text-white h-fit w-fit border-blue-500 text-[1vw] px-2 py-1 rounded-[15px]' to="/profile/addSection">Add profile section</Link>
-            <Link className='border-1 text-blue-500 font-semibold hover:text-blue-600 hover:border-2 hover:bg-blue-100 focus:bg-blue-500 hover:border-blue-600 focus:text-white h-fit w-fit border-blue-500 text-[1vw] px-2 py-1 rounded-[15px]'>Enhance Profile</Link>
-            <Link className='border-1 text-blue-500 font-semibold hover:text-blue-600 hover:border-2 hover:bg-blue-100 focus:bg-blue-500 hover:border-blue-600 focus:text-white h-fit w-fit border-blue-500 text-[1vw] px-2 py-1 rounded-[15px]'>Resources</Link>
+            {/* <Link className='border-1 text-blue-500 font-semibold hover:text-blue-600 hover:border-2 hover:bg-blue-100 focus:bg-blue-500 hover:border-blue-600 focus:text-white h-fit w-fit border-blue-500 text-[1vw] px-2 py-1 rounded-[15px]'>Enhance Profile</Link> */}
+            {/* <Link className='border-1 text-blue-500 font-semibold hover:text-blue-600 hover:border-2 hover:bg-blue-100 focus:bg-blue-500 hover:border-blue-600 focus:text-white h-fit w-fit border-blue-500 text-[1vw] px-2 py-1 rounded-[15px]'>Resources</Link> */}
           </div>
           <div className='h-[35%] w-full p-1  mt-1 flex flex-row gap-2 '>
              <div className='h-full w-[50%] rounded-lg bg-blue-100 relative '>

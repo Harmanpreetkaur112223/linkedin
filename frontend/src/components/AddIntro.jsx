@@ -9,15 +9,21 @@ import AddAbout from './AddAbout'
 
 function AddIntro() {
     const {addExperience,setAddExperience , addEducation,setAddEducation , addSkills, setAddSkills , addAbout, setAddAbout ,addIntro , setAddIntro }=useContext(UserContextData)
+    const handleClick = () =>{
+      // setAddAbout(false)
+      // setAddEducation(false)
+      // setAddSkills(false)
+      // setAddExperience(false)
+    }
   return (
    <>
     <Navbar/>
     {addExperience && <AddExperience/>}
      {addEducation && <AddEducation/>}
-     {addSkills && <AddSkills   />}
+     {addSkills && <AddSkills/>}
      
      {addAbout && <AddAbout/>}
-     <div className='h-screen w-full  bg-slate-100 border-1 flex flex-row py-4 justify-center '>
+     <div className='h-screen w-full  bg-slate-100 border-1 flex flex-row py-4 justify-center ' onClick={handleClick}>
         <div className='h-min w-[70%] bg-white rounded-lg shadow-lg py-8 px-[3vw]'>
             <div className='h-[10%] w-full  p-2 text-[1.9vw] font-bold  '>Add to profile</div>
             <hr />

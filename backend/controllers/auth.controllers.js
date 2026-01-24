@@ -47,7 +47,7 @@ const signup = async(req , res)=>{
         const profileData = {}
         if(role === "student")
         {
-            profileData.studentProfile = {
+            profileData.education = {
                 college: college || "",
                 degree: degree || "",
                 specialization: specialization || "",
@@ -58,7 +58,7 @@ const signup = async(req , res)=>{
                 accomplishments: accomplishments || "",
                 recommendations: recommendations || ""
             }
-            // console.log({...profileData})
+            console.log({...profileData})
         }
         else if(role === "recruiter"){
             profileData.recruiterProfile = {

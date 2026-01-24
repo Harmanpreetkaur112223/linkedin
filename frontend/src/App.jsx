@@ -26,8 +26,9 @@ function App() {
      <Route path='/profile' element={userData?<Profile/>:<Navigate to ="/login"/>}/>
      <Route path='/profile/addSection' element={userData?<AddIntro/>:<Navigate to ="/login"/>}/>
      <Route path='/profile/editIntro' element={userData?<EditIntro/>:<Navigate to ="/login"/>}/>
+     <Route path='/addExperience' element={<AddExperience/>}/>
 
-     <Route path='/addExperience' element={userData?<AddExperience/>:<Navigate to ="/login"/>}/>
+     {/* <Route path='/addExperience' element={userData?<AddExperience/>:<Navigate to ="/login"/>}/> */}
     <Route path = "/network" element={userData?<Network/>:<Navigate to ="/login"/>}/>
     <Route path = "/jobs" element={userData?<Jobs/>:<Navigate to ="/login"/>}/>
     <Route path = "/notifications" element={userData?<Notification/>:<Navigate to ="/login"/>}/>

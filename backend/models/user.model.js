@@ -71,17 +71,30 @@ const userSchema = mongoose.Schema({
         enum:["student","recruiter"],
         required:true
     },
+      
     studentProfile:{
+      
+    },
+    education:[{
         college:String,
         degree:String,
         specialization:String,
         startYear:Number,
         endYear:Number,
-        skills:[String],
+        grade:String,
+        startDate:{
+            month:String,
+            year:String
+        },
+        endDate:{
+            month:String,
+            year:String
+        },
+        studentDescription:String,
         jobPreferences:String,
         accomplishments:String,
         recommendations:String
-    },
+    }] ,
     skills:[
         {type:String}
     ],
@@ -98,11 +111,13 @@ const userSchema = mongoose.Schema({
     frontImage:{
         type:String
     },
-    recruiterProfile:{
+    workProfile:[{
         companyName:String,
-        recruiterRole:String,
-        experience:Number
-    },
+        title:String,
+        experience:Number,
+        employementType :{type:String,enum:['full-time','part-time']}
+       
+    }],
     isEmailVerified:{
         type:Boolean,
         default:false

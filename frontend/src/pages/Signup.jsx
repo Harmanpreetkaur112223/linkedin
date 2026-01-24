@@ -42,6 +42,9 @@ function Signup() {
     gender:"",
     location:"",
     studentProfile:{
+    },
+    education:[
+      {  
       college:"",
       degree:"",
       specialization:"",
@@ -51,17 +54,20 @@ function Signup() {
       jobPreferences:"",
       accomplishments:"",
       recommendations:""
-    },
-     recruiterProfile:{
+      }
+    ],
+    workProfile:[{
         companyName:"",
-        recruiterRole:"",
-        experience:0
-    }
+        title:"",
+        experience:0,
+        employmentType:""
+        
+    }]
   })
-
+// console.log(formData.studentProfile['education']['college'])
 // reset form
 const resetForm = () => {
-  const initialformdata = {
+  const initialformdata ={
     firstName:"",
     lastName:"",
     userName:"",
@@ -69,7 +75,8 @@ const resetForm = () => {
     password:"",
     gender:"",
     location:"",
-    studentProfile:{
+    studentProfile:{education:[
+      {  
       college:"",
       degree:"",
       specialization:"",
@@ -79,12 +86,16 @@ const resetForm = () => {
       jobPreferences:"",
       accomplishments:"",
       recommendations:""
+      }
+    ]
     },
-     recruiterProfile:{
+     workProfile:[{
         companyName:"",
-        recruiterRole:"",
-        experience:0
-    }
+        title:"",
+        experience:0,
+        employmentType:""
+        
+    }]
   }
     setFormData(initialformdata);
     setRole('');           // also reset role selection
@@ -99,16 +110,16 @@ const resetForm = () => {
     // console.log(formData)
   }
 
-  function handleStudentChange(e){
-    const {name , value} = e.target;
-    console.log(name , value)
-    setFormData({...formData,studentProfile:{...formData.studentProfile,[name]:value}})
-    console.log(formData)
-  }
+  function handleStudentChange(e) {
+  const { name, value } = e.target;
+
+  setFormData({...formData,education:{...formData.education,[name]:value}})
+}
+
    function handleRecruiterChange(e){
     const {name , value} = e.target;
     console.log(name , value)
-    setFormData({...formData,recruiterProfile:{...formData.recruiterProfile,[name]:value}})
+    setFormData({...formData,workProfile:{...formData.workProfile,[name]:value}})
     console.log(formData)
   }
 
@@ -145,22 +156,28 @@ const resetForm = () => {
     };
 
     if (role === 'student') {
-      payload.college = formData.studentProfile.college || undefined;
-      payload.degree = formData.studentProfile.degree || undefined;
-      payload.specialization = formData.studentProfile.specialization || undefined;
-      payload.startYear = formData.studentProfile.startYear ? Number(formData.studentProfile.startYear) : undefined;
-      payload.endYear = formData.studentProfile.endYear ? Number(formData.studentProfile.endYear) : undefined;
-      payload.skills = formData.studentProfile.skills ? formData.studentProfile.skills.split(',').map(s => s.trim()) : undefined;
-      payload.jobPreferences = formData.studentProfile.jobPreferences || undefined;
-      payload.accomplishments = formData.studentProfile.accomplishments || undefined;
-      payload.recommendations = formData.studentProfile.recommendations || undefined;
+     const edu = formData.education;
+
+payload.college = edu.college;
+payload.degree = edu.degree;
+payload.specialization = edu.specialization;
+payload.startYear = edu.startYear ? Number(edu.startYear) : undefined;
+payload.endYear = edu.endYear ? Number(edu.endYear) : undefined;
+payload.skills = edu.skills
+  ? edu.skills.split(",").map(s => s.trim())
+  : [];
+payload.jobPreferences = edu.jobPreferences;
+payload.accomplishments = edu.accomplishments;
+payload.recommendations = edu.recommendations;
+
     } else if (role === 'recruiter') {
-      payload.companyName = formData.recruiterProfile.companyName || undefined;
-      payload.recruiterRole = formData.recruiterProfile.recruiterRole || undefined;
-      payload.experience = formData.recruiterProfile.experience ? Number(formData.recruiterProfile.experience) : 0;
+      payload.companyName = formData.workProfile.companyName || undefined;
+      payload.recruiterRole = formData.workProfile.recruiterRole || undefined;
+      payload.experience = formData.workProfile.experience ? Number(formData.workProfile.experience) : 0;
     }
 
     try {
+      // console.log(payload)
       const response = await axios.post(
         `${serverUrl}/api/auth/signup`, // ← change to your real endpoint
         payload,
@@ -176,7 +193,7 @@ const resetForm = () => {
       // Optional: reset form or redirect
       // setFormData({... initial state ...})
       // window.location.href = '/login'
-      <Navigate to = "/"/>
+      navigate("/")
       console.log('Success:', response.data);
     } catch (err) {
       const {message} = err.response?.data
@@ -427,40 +444,40 @@ const resetForm = () => {
               <h3 className="text-lg font-semibold text-white">Education & Preferences</h3>
 
               <div className="relative">
-                <input autoComplete='off' type="text" id="college" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="College / University"  value={formData.studentProfile.college} onChange={handleStudentChange} name="college"/>
+                <input autoComplete='off' type="text" id="college" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="College / University"  value={formData.education?.['college'] ?? ""} onChange={handleStudentChange} name="college" required/>
                 <label htmlFor="college" className="absolute left-4 top-4 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-300 pointer-events-none">College / University</label>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="relative">
-                  <input autoComplete='off' type="text" id="degree" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="Degree" value={formData.studentProfile.degree} onChange={handleStudentChange} name='degree' />
+                  <input autoComplete='off' type="text" id="degree" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="Degree" value={formData.education?.['degree']??""} onChange={handleStudentChange} name='degree'required  />
                   <label htmlFor="degree" className="absolute left-4 top-4 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-300 pointer-events-none">Degree</label>
                 </div>
                 <div className="relative">
-                  <input autoComplete='off' type="text" id="specialization" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="Specialization"  value={formData.studentProfile.specialization} onChange={handleStudentChange} name='specialization'/>
+                  <input autoComplete='off' type="text" id="specialization" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="Specialization"  value={formData.education?.['specialization']??""} onChange={handleStudentChange} name='specialization'required />
                   <label htmlFor="specialization" className="absolute left-4 top-4 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-300 pointer-events-none">Specialization</label>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="relative">
-                  <input autoComplete='off' type="number" id="startYear" placeholder="Start Year" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300"  value = {formData.studentProfile.startYear} onChange={handleStudentChange} name='startYear'/>
+                  <input autoComplete='off' type="number" id="startYear" placeholder="Start Year" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300"  value = {formData.education?.['startYear']??""} onChange={handleStudentChange} name='startYear'required />
                   <label htmlFor="startYear" className="absolute left-4 top-4 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-300 pointer-events-none">Start Year</label>
                 </div>
                 <div className="relative">
-                  <input autoComplete='off' type="number" id="endYear" placeholder="End Year (or expected)" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300"  value={formData.studentProfile.endYear} onChange={handleStudentChange} name='endYear'/>
+                  <input autoComplete='off' type="number" id="endYear" placeholder="End Year (or expected)" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300"  value={formData.education?.['endYear']??""} onChange={handleStudentChange} name='endYear'required />
                   <label htmlFor="endYear" className="absolute left-4 top-4 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-300 pointer-events-none">End Year</label>
                 </div>
               </div>
 
               {/* You can later turn this into multi-select chips for skills */}
-              <div className="relative">
+              {/* <div className="relative">
                 <input autoComplete='off' type="text" id="skills" placeholder="Skills (comma separated)" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" value={formData.studentProfile.skills} onChange={handleStudentChange} name='skills' />
                 <label htmlFor="skills" className="absolute left-4 top-4 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-300 pointer-events-none">Skills</label>
-              </div>
+              </div> */}
 
               <div className="relative">
-                <textarea id="jobPreferences" rows={2} className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="Job Preferences" value={formData.studentProfile.jobPreferences} onChange={handleStudentChange} name="jobPreferences"></textarea>
+                <textarea id="jobPreferences" rows={2} className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="Job Preferences" value={formData.education?.['jobPreferences']??""} onChange={handleStudentChange} name="jobPreferences"required ></textarea>
                 <label htmlFor="jobPreferences" className="absolute left-4 top-4 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-300 pointer-events-none" >Job Preferences</label>
               </div>
             </div>
@@ -472,12 +489,12 @@ const resetForm = () => {
               <h3 className="text-lg font-semibold text-white">Company & Role</h3>
 
               <div className="relative">
-                <input autoComplete='off' type="text" id="companyName" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="Company Name" name='companyName' value={formData.recruiterProfile.companyName} onChange={handleRecruiterChange} />
+                <input autoComplete='off' type="text" id="companyName" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="Company Name" name='companyName' value={formData.workProfile?.['companyName'] ?? ""} onChange={handleRecruiterChange} />
                 <label htmlFor="companyName" className="absolute left-4 top-4 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-300 pointer-events-none">Company Name</label>
               </div>
 
               <div className="relative">
-                <input autoComplete='off' type="text" id="recruiterRole" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="Your Role / Title" name='recruiterRole' value={formData.recruiterProfile.recruiterRole} onChange={handleRecruiterChange}/>
+                <input autoComplete='off' type="text" id="recruiterRole" className="peer w-full px-4 pt-6 pb-2 bg-white/5 border border-white/20 rounded-lg text-white placeholder-transparent focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 transition-all duration-300" placeholder="Your Role / Title" name='recruiterRole' value={formData.workProfile?.['recruiterRole']??""} onChange={handleRecruiterChange}/>
                 <label htmlFor="recruiterRole" className="absolute left-4 top-4 text-gray-400 text-sm transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:top-4 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-300 pointer-events-none">Your Role</label>
               </div>
 
@@ -489,7 +506,7 @@ const resetForm = () => {
     autoComplete='off'
     name="experience"
     // Important: convert to string for controlled input (React expects string for value)
-    value={formData.recruiterProfile.experience ?? ""}   // use ?? to handle undefined → ""
+    value={formData.workProfile?.['experience'] ?? ""}   // use ?? to handle undefined → ""
     onChange={handleRecruiterChange}
     placeholder="Years of Experience"
     min="0"
