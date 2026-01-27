@@ -15,9 +15,9 @@ function ProfileCover() {
     <>
     <div className=' flex flex-col h-[50%] shadow-md rounded-[10px] bg-white relative cursor-pointer  ' onClick={()=>navigate("/profile")}>
         <div className=' flex flex-col h-[25%] w-full   'onClick={()=>navigate("/profile")}  >
-            <img src={userData.user.coverImage} alt="" className='h-full rounded-tl-[10px] rounded-tr-[10px] cursor-pointer' />
+            <img src={userData.user?.coverImage || "img.jpeg"} alt="" className='h-full rounded-tl-[10px] rounded-tr-[10px] cursor-pointer' />
         </div>
-        <img src={userData.user.profileImage} alt=" " className='absolute top-[30px] left-[10px] border-2 border-white cursor-pointer rounded-[50%] h-[4vw] w-[4vw] ' />
+        <img src={userData.user?.profileImage || "profile.png"} alt=" " className='absolute top-[30px] left-[10px] border-2 border-white cursor-pointer rounded-[50%] h-[4vw] w-[4vw] ' />
         <div className=' flex justify-center items-center  h-[75%] w-full  ' >
             <div className=' h-[70%] w-[80%] mt-8 flex items-center flex-col cursor-pointer' >
                 <p className='font-bold text-[1.4vw] cursor-pointer '>{userData.user?.firstName} {userData.user?.lastName}</p>

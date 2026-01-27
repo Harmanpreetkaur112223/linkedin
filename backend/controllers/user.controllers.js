@@ -5,7 +5,7 @@ const getUserDetails = async(req , res)=>{
         const userId = req.userId;
         
         const user = await User.findById(userId).select("-password")
-        console.log("user",user)
+        // console.log("user",user)
         if(!user)res.status(400).json({message:"User does not found"})
         res.status(200).json({user})
     } catch (error) {

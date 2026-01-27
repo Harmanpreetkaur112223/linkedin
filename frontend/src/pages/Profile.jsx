@@ -97,9 +97,9 @@ function Profile() {
           <div className='min-h-[50%] w-full  mt-8 flex justify-between items-center relative'>
           <div className='w-[full]  h-full pl-4'>
              <img src="edit-text.png" alt="" onClick = {()=>navigate("/profile/editIntro")} className='h-[2.6vw] p-2 hover:bg-slate-100 cursor-pointer absolute right-1 top-1 rounded-[50%]' />
-            <div className='text-[1.7vw] font-bold '>{userData.user.firstName} {userData.user.lastName}</div>
+            <div className='text-[1.7vw] font-bold '>{userData.user?.firstName} {userData.user?.lastName}</div>
             <div>{userData.user.role === "student"? `Student at ${ userData.user.education[0]['college']}`:`Working at ${userData.user?.recruiterProfile?.companyName}`}</div>
-            <div>{userData.user.location} <span><Link className='text-blue-500 font-semibold cursor-pointer'>Contact info</Link></span></div>
+            <div>{userData.user?.location} <span><Link className='text-blue-500 font-semibold cursor-pointer'>Contact info</Link></span></div>
             {/* <div>{userData.user.userName}</div> */}
           </div>
           <div className='w-[50%] h-full  font-semibold text-[1.1vw]'> {userData.user.role === "student"?`Student at ${ userData.user.education[0]['college']}`:`Working at ${userData.user?.recruiterProfile?.companyName}`}</div>

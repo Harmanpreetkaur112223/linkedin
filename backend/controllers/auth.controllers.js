@@ -58,7 +58,7 @@ const signup = async(req , res)=>{
                 accomplishments: accomplishments || "",
                 recommendations: recommendations || ""
             }
-            console.log({...profileData})
+            // console.log({...profileData})
         }
         else if(role === "recruiter"){
             profileData.recruiterProfile = {
@@ -96,7 +96,7 @@ const signup = async(req , res)=>{
             
         }
         const token = jwt.sign(payload , process.env.JWT_SECRET,{expiresIn : process.env.JWT_EXPIRES_IN || '7d'})
-        console.log(token)
+        // console.log(token)
         res.cookie("token", token, {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",   // false in dev, true in prod

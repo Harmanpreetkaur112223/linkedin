@@ -45,7 +45,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContextData } from '../context/UserProvider';
 import CreatePost from './CreatePost';
 function StartPost() {
-  let {startPost , setStartPost} = useContext(UserContextData)
+  let {startPost , setStartPost ,userData , setUserData} = useContext(UserContextData)
   const navigate = useNavigate();
  const handlePostStart = ()=>{
   console.log("startPost ",startPost)
@@ -57,10 +57,10 @@ function StartPost() {
       <div className="flex items-center gap-3 px-4 pt-4 pb-2">
         <div className="flex-shrink-0">
           <img
-            src="/profile.png"
+            src={userData.user?.profileImage || "/profile.png"}
             alt="Your profile"
             onClick={() => navigate('/profile')}
-            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-white cursor-pointer hover:opacity-90 transition"
+            className="w-[11px] h-[11px] sm:w-12 sm:h-12 rounded-full object-cover border-2 border-white cursor-pointer hover:opacity-90 transition"
           />
         </div>
 

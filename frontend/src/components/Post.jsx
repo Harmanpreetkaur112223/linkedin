@@ -76,7 +76,7 @@
 // export default Post
 import React from 'react';
 
-function Post() {
+function Post({user,description,postImage,likes,comments}) {
   return (
     <div className="w-full bg-white shadow-lg rounded-lg mt-4 mb-6 p-3 sm:p-4 flex flex-col gap-2 md:gap-3">
       {/* Suggested + menu buttons */}
@@ -108,10 +108,10 @@ function Post() {
           />
           <div className="min-w-0">
             <h3 className="text-base sm:text-lg font-semibold text-black cursor-pointer hover:text-blue-800 hover:underline truncate">
-              Abc singh
+              {user.firstName} {user.lastName}
             </h3>
             <p className="text-xs sm:text-sm text-gray-600 cursor-pointer truncate">
-              Student at Anc
+              {user.role === "student" ? `Student at ${user?.education[0]['college']}`:`Working as ${user.workProfile?.title} at ${user?.workProfile?.companyName}`}
             </p>
             <p className="text-xs sm:text-sm text-gray-600 cursor-pointer">Time.</p>
           </div>
@@ -124,11 +124,7 @@ function Post() {
 
       {/* Main content text */}
       <div className="px-1 text-sm sm:text-base leading-relaxed text-gray-800">
-        Proud to showcase the inspiring journey of our student Dheeraj Khetwal (B.Tech CSE, 2nd Year) ✨
-        <br /><br />
-        From national-level hackathons to leadership as a Google Student Ambassador, his experience at Amrapali University reflects innovation, confidence, and readiness for real-world challenges. 🚀🎓
-        <br /><br />
-        Proud to showcase the inspiring journey of our student Dheeraj Khetwal (B.Tech CSE, 2nd Year) ✨ From national-level hackathons to leadership as a Google Student Ambassador, his experience at Amrapali University reflects innovation, confidence, and readiness for real-world challenges. 🚀🎓
+       {description}
       </div>
 
       {/* Hashtags */}
@@ -139,20 +135,20 @@ function Post() {
       </div>
 
       {/* Image */}
-      <div className="mt-1">
+      {postImage && <div className="mt-1">
         <img
-          src="wallpaper.jpg"
+          src={postImage || null}
           alt="post content"
           className="w-full h-auto rounded-lg object-cover max-h-[500px]"
         />
-      </div>
+      </div>}
 
       {/* Action buttons */}
       <div className="flex items-center justify-around border-t border-gray-200 pt-2 mt-1">
-        <ActionItem icon="like.png" label="Like" />
-        <ActionItem icon="comment.png" label="Comment" />
-        <ActionItem icon="repost.png" label="Repost" />
-        <ActionItem icon="send.png" label="Send" />
+        <ActionItem icon="like.png" label={likes.length} />
+        <ActionItem icon="comment.png" label={comments.length} />
+        {/* <ActionItem icon="repost.png" label="Repost" />
+        <ActionItem icon="send.png" label="Send" /> */}
       </div>
     </div>
   );
@@ -161,7 +157,7 @@ function Post() {
 function ActionItem({ icon, label }) {
   return (
     <button className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition">
-      <img src={icon} alt={label} className="h-5 w-5 sm:h-6 sm:w-6" />
+      <img src={icon} alt={label} className="h-5 w-3 sm:h-6 sm:w-6" />
       <span className="text-xs sm:text-sm font-medium text-gray-700">{label}</span>
     </button>
   );
