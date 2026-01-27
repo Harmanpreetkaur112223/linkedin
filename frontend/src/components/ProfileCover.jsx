@@ -15,13 +15,14 @@ function ProfileCover() {
     <>
     <div className=' flex flex-col h-[50%] shadow-md rounded-[10px] bg-white relative cursor-pointer  ' onClick={()=>navigate("/profile")}>
         <div className=' flex flex-col h-[25%] w-full   'onClick={()=>navigate("/profile")}  >
-            <img src="img.jpeg" alt="" className='h-full rounded-tl-[10px] rounded-tr-[10px] cursor-pointer' />
+            <img src={userData.user.coverImage} alt="" className='h-full rounded-tl-[10px] rounded-tr-[10px] cursor-pointer' />
         </div>
-        <img src="profile.png" alt=" " className='absolute top-[30px] left-[10px] border-2 border-white cursor-pointer rounded-[50%] h-[4.7vw] ' />
+        <img src={userData.user.profileImage} alt=" " className='absolute top-[30px] left-[10px] border-2 border-white cursor-pointer rounded-[50%] h-[4vw] w-[4vw] ' />
         <div className=' flex justify-center items-center  h-[75%] w-full  ' >
             <div className=' h-[70%] w-[80%] mt-8 flex items-center flex-col cursor-pointer' >
-                <p className='font-bold text-[1.4vw] cursor-pointer '>{userData.user.firstName} {userData.user.lastName}</p>
-                <p className=' text-[0.9vw] cursor-pointer '>{userData.user.role === 'student'?`Student at ${ userData.user.education[0].college}`:`Working at ${userData.user?.recruiterProfile?.companyName}`} </p>
+                <p className='font-bold text-[1.4vw] cursor-pointer '>{userData.user?.firstName} {userData.user?.lastName}</p>
+               
+                    {userData.user?.education[0]['college'] &&  <p className=' text-[0.9vw] cursor-pointer '>{userData.user.role === 'student'?`Student at ${ userData.user?.education[0]['college']}`:`Working at ${userData.user?.recruiterProfile?.companyName}`} </p> }
                 {/* <p className='text-gray-400 cursor-pointer hover:text-black hover:underline text-[0.9vw] '>{userData.user.location}</p> */}
                 {/* <button value="Experience">+ Experience</button> */}
                <Link className='border-1 mt-8 text-blue-500 font-semibold hover:text-blue-600 hover:border-2 hover:bg-blue-100 focus:bg-blue-500 hover:border-blue-600 focus:text-white h-fit w-fit border-blue-500 text-[1vw] px-2 py-1 rounded-[15px]' to="/profile/editIntro">Add profile section</Link>

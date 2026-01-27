@@ -108,7 +108,7 @@ const userSchema = mongoose.Schema({
     coverImage:{
         type:String
     },
-    frontImage:{
+    profileImage:{
         type:String
     },
     workProfile:[{

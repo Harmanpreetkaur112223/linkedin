@@ -17,6 +17,9 @@ function UserProvider({children}) {
   let[isUserEducation , setIsUserEducation] = useState(false)
   let[isUserSkill ,setIsUserSkill] = useState(false)
   let[isUserExperience , setIsUserExperience] = useState(false)
+  let [isProfileImage , setIsProfileImage] = useState(false)
+  let[isCoverImage , setIsCoverImage] = useState(false)
+
 
 
   const {serverUrl} = useContext(AuthContextData)
@@ -35,6 +38,7 @@ function UserProvider({children}) {
     const value = {
         userData,setUserData,startPost,setStartPost,edit,setEdit,addExperience,setAddExperience,addIntro,setAddIntro,addAbout,setAddAbout,addSkills,setAddSkills,addEducation,setAddEducation
         ,isUserAbout,setIsUserAbout,isUserIntro,setIsUserIntro,isUserEducation,setIsUserEducation,isUserSkill,setIsUserSkill,isUserExperience,setIsUserExperience
+        ,isProfileImage , setIsProfileImage,isCoverImage,setIsCoverImage
     }
   return (
     <UserContextData.Provider value = {value}>

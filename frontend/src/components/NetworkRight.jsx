@@ -30,7 +30,7 @@ function NetworkRight() {
          <div className='h-fit py-4 px-4 w-full rounded-lg shadow-lg  bg-white flex flex-col gap-4'>
           
            <div className='text-[1.2vw] font-semibold flex flex-row justify-between'>
-            People you may know from {userData.user.role === "student"? userData.user.studentProfile.collge : userData.user.recruiterProfile.companyName}
+            People you may know from {userData.user.role === "student"? userData.user.education[0].college : userData.user.recruiterProfile.companyName}
 
             </div>
             <div className='h-fit w-full flex flex-row flex-wrap gap-4'>

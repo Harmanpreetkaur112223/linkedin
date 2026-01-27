@@ -80,7 +80,7 @@ function Navbar() {
   const {serverUrl} = useContext(AuthContextData)
   const {userData , setUserData} = useContext(UserContextData)
   let [openSearch , setOpenSearch] = useState(false)
-  console.log("showProfile",showProfile)
+  // console.log("showProfile",showProfile)
   const navigate = useNavigate()
 
   const handleShowProfile=()=>{

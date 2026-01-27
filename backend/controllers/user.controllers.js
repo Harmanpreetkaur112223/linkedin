@@ -1,4 +1,4 @@
-
+import uploadOnCloudinary from "../config/cloudinary.js"
 import User from "../models/user.model.js"
 const getUserDetails = async(req , res)=>{
     try {
@@ -15,8 +15,9 @@ const getUserDetails = async(req , res)=>{
 }
 
 const editProfile = async(req , res)=>{
+    // console.log(req.files?.profileImage)
     try {
-        const{isUserIntro,isUserAbout,isUserEducation,isUserSkill,isUserExperience} = req.body
+        const{isProfileImage,isCoverImage ,isUserIntro,isUserAbout,isUserEducation,isUserSkill,isUserExperience} = req.body
        if(isUserIntro){
          const {firstName , lastName , additionalName , email , headline , location,userName , about , connections,followers,following,noOfConnections , noOfFollowers , noOfFollowing,gender,role,studentProfile,recruiterProfile,skills,posts,noOfPosts} = req.body
         if((!firstName || !lastName || !email) )return res.status(400).json({message:"missing credentials"})
@@ -68,6 +69,40 @@ const editProfile = async(req , res)=>{
          if(!updatedUser)return res.status(400).json({message:"Invalid user"})
          res.status(200).json({message:"User recruiterProfile updated successfully",user:updatedUser})
        
+    }
+    console.log("isProfileImage",isProfileImage)
+   if (isProfileImage)
+    {   let profileImage;
+        if(req.files.profileImage){
+            // console.log(req.files.profileImage)
+          try {
+              profileImage = await uploadOnCloudinary(req.files.profileImage[0].path)
+            //   console.log("c url",profileImage)
+            if(!profileImage)return res.status(400).json({message:"error in path"})
+                const updatedUser = await User.findByIdAndUpdate(req.userId,{profileImage},{new:true})
+            // console.log(updatedUser)
+            res.status(201).json({user:updatedUser})
+          } catch (error) {
+            console.log(error)
+            res.status(400).json({message:error})
+          }
+        }
+    }
+    if(isCoverImage)
+    {
+        let coverImage;
+        if(req.files.coverImage){
+            try {
+                coverImage = await uploadOnCloudinary(req.files.coverImage[0].path)
+                if(!coverImage)return res.status(400).json({message:"error in path"})
+                const updatedUser = await User.findByIdAndUpdate(req.userId,{coverImage},{new:true})
+                  res.status(201).json({user:updatedUser})
+
+            } catch (error) {
+                console.log(error)
+            res.status(400).json({message:error})
+            }
+        }
     }
 
     } catch (error) {

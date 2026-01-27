@@ -25,9 +25,11 @@ import React, { useContext, useState } from 'react';
 import axios from "axios"
 import {Navigate, useNavigate} from "react-router-dom"
 import { AuthContextData } from '../context/AuthContext';
+import { UserContextData } from '../context/UserProvider';
 function Signup() {
   const navigate = useNavigate()
   let {serverUrl} = useContext(AuthContextData)
+  let {userData , setUserData} = useContext(UserContextData)
   const [role, setRole] = useState(''); // '' | 'student' | 'recruiter'
   const [loading, setLoading] = useState(false)
   const [error , setError] = useState("")
@@ -177,7 +179,7 @@ payload.recommendations = edu.recommendations;
     }
 
     try {
-      // console.log(payload)
+      console.log(payload)
       const response = await axios.post(
         `${serverUrl}/api/auth/signup`, // ← change to your real endpoint
         payload,
@@ -188,8 +190,10 @@ payload.recommendations = edu.recommendations;
           withCredentials:true
                   }
       );
-
-      setSuccess('Registration successful! You can now sign in.');
+      console.log(response)
+      setSuccess('Registration successful! You can now sign in.');    
+      setUserData(response.data.user)
+      
       // Optional: reset form or redirect
       // setFormData({... initial state ...})
       // window.location.href = '/login'
@@ -198,7 +202,7 @@ payload.recommendations = edu.recommendations;
     } catch (err) {
       const {message} = err.response?.data
       setError(message)
-      // console.error('Signup error:', message);
+      console.error('Signup error:', message);
     } finally {
        resetForm()
       setLoading(false);
