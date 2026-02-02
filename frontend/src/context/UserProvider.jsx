@@ -29,7 +29,7 @@ function UserProvider({ children }) {
         withCredentials: true,
       });
       setUserData(response.data);
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.log("get user details", error);
     }
@@ -41,15 +41,15 @@ function UserProvider({ children }) {
         withCredentials: true,
       });
       setPosts(response.data.posts)
-      console.log("Post response", response.data);
+      // console.log("Post response", response.data);
     } catch (error) {
       console.log("Get posts error", error);
     }
   };
   useEffect(() => {
     (getUserDetails(), getPosts());
-    console.log(userData);
-    console.log(posts)
+    // console.log(userData);
+    // console.log(posts)
   }, []);
   const value = {
     userData,
@@ -83,7 +83,8 @@ function UserProvider({ children }) {
     isCoverImage,
     setIsCoverImage,
     posts,
-    setPosts
+    setPosts,
+    getPosts
   };
   return (
     <UserContextData.Provider value={value}>

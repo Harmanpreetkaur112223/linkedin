@@ -1,82 +1,46 @@
-// import React from 'react'
+import React, { useEffect, useRef, useState } from "react";
+import { useContext } from "react";
+import { AuthContextData } from "../context/AuthContext";
+import axios from "axios";
+import { UserContextData } from "../context/UserProvider";
+import CommentOuter from "./CommentOuter";
 
-// function Post() {
-//   return (
-//     <>
-//     <div className='h-max w-full shadow-lg rounded-lg mt-4  p-2 flex flex-col gap-1 mb-4 bg-white' >
-//       <div className='h-max w-full  flex flex-row justify-between'>
-//         <div className=' h-full text-[0.89vw] text-gray-700' >Suggested</div>
-//         <div className='h-full flex flex-row gap-1 '>
-//           <img src="menu.png" alt="" className='h-[5vh] cursor-pointer rounded-[50%] hover:bg-slate-100 '/>
-//           <img src="cut.png" alt="" className='h-[5vh] p-2 cursor-pointer rounded-[50%] hover:bg-slate-100 ' />
-//         </div>
-//       </div>
-//       <hr />
-//       <div className='h-[10%]  w-full  flex flex-row justify-between'>
-//         <div className='h-full  flex flex-row gap-1 items-center w-[50%]'>
-//           <img src="profile.png" alt=""className='h-[11vh] cursor-pointer p-2' />
-//           <div>
-//             <h3 className='text-[1.2vw] text-black cursor-pointer hover:text-blue-800 font-semibold hover:underline '>Abc singh</h3>
-//             <p className='text-[0.8vw] text-gray-700 cursor-pointer '>Student at Anc</p>
-//             <p className='text-[0.8vw] text-gray-700 cursor-pointer '>Time.</p>
-//           </div>
-//         </div>
-//         <div className='text-blue-600  font-extrabold hover:bg-blue-100 p-4 h-[60%] flex items-center justify-center mt-2 mr-2 rounded-lg cursor-pointer'>+ follow</div>
-//       </div>
-//       <div className='h-fit p-2 '>
-//         <p className='h-fit text-[0.9vw]'>Proud to showcase the inspiring journey of our student Dheeraj Khetwal (B.Tech CSE, 2nd Year) ✨
+function Post({ id, post, user, description, postImage, likes, comments }) {
+  const { serverUrl } = useContext(AuthContextData);
+  const { posts, setPosts, userData, getPosts } = useContext(UserContextData);
+  const[onComment , setOnComment] = useState(false)
+  const[currentComments , setCurrentComments] = useState(comments || [])
+  const [isLiked, setIsLiked] = useState(
+    likes.includes(userData.user?._id) || false,
+  );
+  const [currentPost, setCurrPost] = useState(post);
+  const handleLike = async (e) => {
+    try {
+      const response = await axios.post(
+        `${serverUrl}/api/post/like/${id}`,
+        {},
+        { withCredentials: true },
+      );
+      console.log("like response ", response);
+      setCurrPost(response.data.post);
+      setIsLiked((prev) => !prev);
+    } catch (error) {
+      console.log("like error", error);
+    }
+  };
+ 
+  useEffect(() => {
+    getPosts();
+  }, [currentPost, setCurrPost,currentComments,setCurrentComments]);
 
-//         From national-level hackathons to leadership as a Google Student Ambassador, his experience at Amrapali University reflects innovation, confidence, and readiness for real-world challenges. 🚀🎓
-//           Proud to showcase the inspiring journey of our student Dheeraj Khetwal (B.Tech CSE, 2nd Year) ✨ From national-level hackathons to leadership as a Google Student Ambassador, his experience at Amrapali University reflects innovation, confidence, and readiness for real-world challenges. 🚀🎓
-//         </p>
-        
-//       </div>
-//       <div className='h-full w-full p-2'>
-//         <p className='text-blue-800 cursor-pointer hover:underline'>
-//           #AmrapaliUniversity hashtag #StudentTestimonial hashtag#StudentSuccess hashtag#BTechCSE hashtag#FutureInnovators hashtag#GoogleStudentAmbassador hashtag#HackathonJourney hashtag#VibeCode hashtag#StartupUttarakhand hashtag#DevFest hashtag#InnovationMindset hashtag#TechLeaders hashtag#CampusToCorporate
-//         </p>
-//       </div>
-//       <div className='h-full w-full '>
-//         <img src="wallpaper.jpg" alt="" className='h-full w-full ' />
-//       </div>
-
-       
-//         <div className='h-[8%] w-full flex flex-row justify-around  '>
-//             <div className=' cursor-pointer   w-full flex items-center justify-center '>
-//                 <div className='rounded-md p-4 h-[94%] w-fit flex items-center justify-center flex-row gap-[1vh] hover:bg-slate-100'>
-//                 <img src="like.png" alt=""  className='h-[4vh]'/>
-//                 <span className='text-[0.9vw] font-semibold '>Like</span>
-//                 </div>
-//             </div>
-//            <div className=' cursor-pointer   w-full flex items-center justify-center '>
-//                 <div className='rounded-md p-4 h-[96%] w-fit flex items-center justify-center flex-row gap-[1vh] hover:bg-slate-100'>
-//                 <img src="comment.png" alt=""  className='h-[4vh]'/>
-//                 <span className='text-[0.9vw] font-semibold '>Comment</span>
-//                 </div>
-//             </div>
-//            <div className=' cursor-pointer   w-full flex items-center justify-center '>
-//                 <div className='rounded-md p-4 h-[96%] w-fit flex items-center justify-center flex-row gap-[1vh] hover:bg-slate-100'>
-//                 <img src="repost.png" alt=""  className='h-[4vh]'/>
-//                 <span className='text-[0.9vw] font-semibold '>Repost</span>
-//                 </div>
-//             </div>
-//              <div className=' cursor-pointer   w-full flex items-center justify-center '>
-//                 <div className='rounded-md p-4 h-[96%] w-fit flex items-center justify-center flex-row gap-[1vh] hover:bg-slate-100'>
-//                 <img src="send.png" alt=""  className='h-[4vh]'/>
-//                 <span className='text-[0.9vw] font-semibold '>Send</span>
-//                 </div>
-//             </div>
-//         </div>
-//     </div>
-    
-//     </>
-//   )
-// }
-
-// export default Post
-import React from 'react';
-
-function Post({user,description,postImage,likes,comments}) {
+  const handleCommentCut = async(commentId) =>{
+    // console.log(id)
+    const response = await axios.delete(`${serverUrl}/api/post/${id}/comment/${commentId}`,{withCredentials:true})
+    console.log(response.data.post)
+    setCurrentComments(response.data.post.comments)
+    // setCurrentComments(currentComments.filter(comment=>comment._id != commentId))
+  }
+  
   return (
     <div className="w-full bg-white shadow-lg rounded-lg mt-4 mb-6 p-3 sm:p-4 flex flex-col gap-2 md:gap-3">
       {/* Suggested + menu buttons */}
@@ -102,18 +66,22 @@ function Post({user,description,postImage,likes,comments}) {
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
           <img
-            src="profile.png"
+            src={user?.profileImage || "profile.png"}
             alt="profile"
             className="h-12 w-12 sm:h-14 sm:w-14 rounded-full cursor-pointer object-cover"
           />
           <div className="min-w-0">
             <h3 className="text-base sm:text-lg font-semibold text-black cursor-pointer hover:text-blue-800 hover:underline truncate">
-              {user.firstName} {user.lastName}
+              {user?.firstName} {user?.lastName}
             </h3>
             <p className="text-xs sm:text-sm text-gray-600 cursor-pointer truncate">
-              {user.role === "student" ? `Student at ${user?.education[0]['college']}`:`Working as ${user.workProfile?.title} at ${user?.workProfile?.companyName}`}
+              {user?.role === "student"
+                ? `Student at ${user?.education[0]["college"]}`
+                : `Working as ${user?.workProfile?.title} at ${user?.workProfile?.companyName}`}
             </p>
-            <p className="text-xs sm:text-sm text-gray-600 cursor-pointer">Time.</p>
+            <p className="text-xs sm:text-sm text-gray-600 cursor-pointer">
+              Time.
+            </p>
           </div>
         </div>
 
@@ -124,43 +92,105 @@ function Post({user,description,postImage,likes,comments}) {
 
       {/* Main content text */}
       <div className="px-1 text-sm sm:text-base leading-relaxed text-gray-800">
-       {description}
+        {description}
       </div>
 
       {/* Hashtags */}
       <div className="px-1">
         <p className="text-blue-700 text-sm sm:text-base cursor-pointer hover:underline break-words">
-          #AmrapaliUniversity #StudentTestimonial #StudentSuccess #BTechCSE #FutureInnovators #GoogleStudentAmbassador #HackathonJourney #VibeCode #StartupUttarakhand #DevFest #InnovationMindset #TechLeaders #CampusToCorporate
+          #AmrapaliUniversity #StudentTestimonial #StudentSuccess #BTechCSE
+          #FutureInnovators #GoogleStudentAmbassador #HackathonJourney #VibeCode
+          #StartupUttarakhand #DevFest #InnovationMindset #TechLeaders
+          #CampusToCorporate
         </p>
       </div>
 
       {/* Image */}
-      {postImage && <div className="mt-1">
-        <img
-          src={postImage || null}
-          alt="post content"
-          className="w-full h-auto rounded-lg object-cover max-h-[500px]"
-        />
-      </div>}
+      {postImage && (
+        <div className="mt-1">
+          <img
+            src={postImage || null}
+            alt="post content"
+            className="w-full h-auto rounded-lg object-cover max-h-[500px]"
+          />
+        </div>
+      )}
 
+      <div className="flex items-center justify-between px-8 border-t border-gray-200 pt-2 mt-1">
+        <div className=" h-full w-[50%] flex gap-2 text-gray-600">
+          <div><img 
+            className={`h-5 w-3 sm:h-6 sm:w-6 cursor-pointer `}
+          
+          src="blue-like.png" alt="" /></div>
+          <div>{currentPost.likes?.length ?? 0}</div>
+        </div>
+        <div className=" h-full w-[50%] flex gap-2 text-gray-600 justify-end">
+          <div>comments</div>
+          <div>{currentComments?.length ?? 0}</div>
+        </div>
+      </div>
       {/* Action buttons */}
       <div className="flex items-center justify-around border-t border-gray-200 pt-2 mt-1">
-        <ActionItem icon="like.png" label={likes.length} />
-        <ActionItem icon="comment.png" label={comments.length} />
-        {/* <ActionItem icon="repost.png" label="Repost" />
-        <ActionItem icon="send.png" label="Send" /> */}
+        <button className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition">
+          <img
+            src={isLiked ? "like2.png" : "like.png"}
+            alt="like"
+            className={`h-5 w-3 sm:h-6 sm:w-6 ${isLiked ? "text-blue-800" : "text-black"} cursor-pointer `}
+            onClick={handleLike}
+          />
+          <span
+            className={`text-xs sm:text-sm font-medium ${isLiked ? "text-blue-600" : "text-gray-700"}`}
+          >
+            {isLiked ? "liked" : "like"}
+          </span>
+        </button>
+        <button className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition">
+          <img
+            src="comment.png"
+            alt="comment"
+            className="h-5 w-3 sm:h-6 sm:w-6"
+            onClick={()=>(setOnComment(prev=>!prev))}
+          />
+          <span className="text-xs sm:text-sm font-medium text-gray-700 cursor-pointer"
+            onClick={()=>(setOnComment(prev=>!prev))}
+           >
+            comment
+          </span>
+        </button>
       </div>
+     {onComment && <CommentOuter id={id} post = {post}/>}
+     {onComment && <>
+     {currentComments.length !== 0 && <>
+      {currentComments.map((val,idx)=>
+      <div key={idx} className="h-fit py-1 w-full flex flex-col  border-t gap-2">
+        <div className=" w-full px-4 h-fit py-2  flex items-center justify-between ">
+          <div className="w-fit h-fit flex gap-4 items-center ">
+            <img
+            src={userData.user.profileImage || "profile.png"}
+            alt="profile"
+            className="h-8 w-8 sm:h-14 sm:w-14 rounded-full cursor-pointer object-cover"
+          />
+          <div className="font-semibold">{val.user.firstName} {val.user.lastName}</div>
+          </div>
+        <div>
+           <img
+            src="cut.png"
+            alt="cut"
+            className="h-[4vh] w-[4vh] p-2 rounded-full hover:bg-gray-200 cursor-pointer"
+            onClick={()=>handleCommentCut(val._id)}
+          />
+        </div>
+        </div>
+        <div className=" w-full h-fit py-2 px-8">
+          {val.content}
+        </div>
+      </div>)}
+     </>} 
+     </>}
     </div>
   );
 }
 
-function ActionItem({ icon, label }) {
-  return (
-    <button className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition">
-      <img src={icon} alt={label} className="h-5 w-3 sm:h-6 sm:w-6" />
-      <span className="text-xs sm:text-sm font-medium text-gray-700">{label}</span>
-    </button>
-  );
-}
+
 
 export default Post;

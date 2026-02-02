@@ -10,7 +10,7 @@ import AddIntro from './AddIntro'
 
 function MainHome() {
   const {addExperience , addEducation , addSkills , addAbout , addIntro,posts}=useContext(UserContextData)
-  console.log("posts",posts)
+  // console.log("posts",posts)
   // posts.map(v=>console.log(v))
   return (
     <>
@@ -19,7 +19,7 @@ function MainHome() {
      
     {posts && <> 
     {posts.map((val,idx)=>
-    <Post key={idx} user={val.user} description={val.description} postImage={val.postImage} likes={val.likes} comments={val.comments} />
+    <Post key={idx} user={val.user} post = {val} id = {val._id} description={val.description} postImage={val.postImage} likes={val.likes} comments={val.comments} />
     )}
     </>}
 

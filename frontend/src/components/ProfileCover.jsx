@@ -6,7 +6,7 @@ import AddExperience from './AddExperience'
 function ProfileCover() {
     const navigate = useNavigate()
     const {userData , setUserData , addExperience , setAddExperience} = useContext(UserContextData)
-    console.log(userData)
+    // console.log(userData)
     const handleExperience=()=>{
         setAddExperience(true)
         console.log("experience" , addExperience)

@@ -52,7 +52,7 @@ function StartPost() {
   setStartPost(true)
  }
   return (
-    <div className="w-full relative bg-white rounded-lg shadow shadow-gray-200/70 mb-6 border border-gray-200">
+    <div className="w-full relative bg-white rounded-lg shadow shadow-gray-200/70 mb-6 border border-gray-200 py-4">
       {/* Top part - Profile + Input */}
       <div className="flex items-center gap-3 px-4 pt-4 pb-2">
         <div className="flex-shrink-0">
@@ -84,7 +84,7 @@ function StartPost() {
       </div>
             {startPost && <div className='absolute top-0 left-0  h-screen w-screen'> <CreatePost/></div>}
       {/* Bottom actions */}
-      <div className="flex items-center justify-around sm:justify-start gap-2 sm:gap-4 px-2 sm:px-4 pb-3 border-t border-gray-100 mt-1">
+      {/* <div className="flex items-center justify-around sm:justify-start gap-2 sm:gap-4 px-2 sm:px-4 pb-3 border-t border-gray-100 mt-1">
         <ActionButton
           icon="/video.png"
           label="Video"
@@ -101,38 +101,38 @@ function StartPost() {
           color="text-red-600"
           hideOnMobile={false}
         />
-      </div>
+      </div> */}
     </div>
   );
 }
 
-function ActionButton({ icon, label, color, hideOnMobile = false }) {
-  return (
-    <button
-      type="button"
-      className={`
-        flex items-center justify-center gap-2 
-        px-3 sm:px-5 py-2.5 
-        rounded-lg hover:bg-gray-100 active:bg-gray-200
-        transition-colors w-full sm:w-auto
-        ${hideOnMobile ? 'hidden sm:flex' : 'flex'}
-      `}
-    >
-      <img
-        src={icon}
-        alt={label}
-        className="w-6 h-6 sm:w-7 sm:h-7 object-contain"
-      />
-      <span
-        className={`
-          text-xs sm:text-sm font-medium whitespace-nowrap
-          ${color || 'text-gray-700'}
-        `}
-      >
-        {label}
-      </span>
-    </button>
-  );
-}
+// function ActionButton({ icon, label, color, hideOnMobile = false }) {
+//   return (
+//     <button
+//       type="button"
+//       className={`
+//         flex items-center justify-center gap-2 
+//         px-3 sm:px-5 py-2.5 
+//         rounded-lg hover:bg-gray-100 active:bg-gray-200
+//         transition-colors w-full sm:w-auto
+//         ${hideOnMobile ? 'hidden sm:flex' : 'flex'}
+//       `}
+//     >
+//       <img
+//         src={icon}
+//         alt={label}
+//         className="w-6 h-6 sm:w-7 sm:h-7 object-contain"
+//       />
+//       <span
+//         className={`
+//           text-xs sm:text-sm font-medium whitespace-nowrap
+//           ${color || 'text-gray-700'}
+//         `}
+//       >
+//         {label}
+//       </span>
+//     </button>
+//   );
+// }
 
 export default StartPost;
