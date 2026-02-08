@@ -1,14 +1,14 @@
-import mongoose, { connection } from "mongoose"
+import mongoose from "mongoose"
 
 const connectionSchems = mongoose.Schema({
     sender:{
-        type:String,
-        required:true
+        type:mongoose.Schema.Types.ObjectId,
+                ref:"User"
     }
     ,
     reciever:{
-        type:String,
-        required:true
+        type:mongoose.Schema.Types.ObjectId,
+                ref:"User"
     },
     status:{
         type:String,

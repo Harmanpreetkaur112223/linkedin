@@ -1,7 +1,7 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
 import Post from "../models/post.model.js"
 import User from "../models/user.model.js"
-
+import { io } from "../app.js";
 
 
 const createPost = async(req , res)=>{
@@ -65,6 +65,8 @@ const like = async(req , res)=>{
         }
         else{post.likes.push(user)}
         await post.save()
+        // socket io integration emiting or sending event from here to frontend
+        io.emit("likeUpdated",{postId,post,likes:post.likes})
         res.status(201).json({post})
     } catch (error) {
         console.log(error)
@@ -89,6 +91,7 @@ const comment = async(req , res)=>{
         if(!post) return res.status(401).json({message:"Invalid post Id"})
          post.comments.push({content,user:userId})
     await post.save()
+    io.emit("commentUpdated",{post,postId})
     // console.log("post updated",updatedPost)
         res.status(201).json({post })
     } catch (error) {

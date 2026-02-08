@@ -4,16 +4,20 @@ import { AuthContextData } from "../context/AuthContext";
 import axios from "axios";
 import { UserContextData } from "../context/UserProvider";
 import CommentOuter from "./CommentOuter";
+import FollowButton from "./FollowButton";
+import { io } from "socket.io-client";
 
+let socket = io("http://localhost:3000",{withCredentials:true});
 function Post({ id, post, user, description, postImage, likes, comments }) {
   const { serverUrl } = useContext(AuthContextData);
   const { posts, setPosts, userData, getPosts } = useContext(UserContextData);
-  const[onComment , setOnComment] = useState(false)
-  const[currentComments , setCurrentComments] = useState(comments || [])
+  const [onComment, setOnComment] = useState(false);
+  const [currentComments, setCurrentComments] = useState(comments || []);
+  const [currentPost, setCurrPost] = useState(post);
+  const[likeArr , setLikeArr] = useState(likes)
   const [isLiked, setIsLiked] = useState(
     likes.includes(userData.user?._id) || false,
   );
-  const [currentPost, setCurrPost] = useState(post);
   const handleLike = async (e) => {
     try {
       const response = await axios.post(
@@ -28,19 +32,34 @@ function Post({ id, post, user, description, postImage, likes, comments }) {
       console.log("like error", error);
     }
   };
- 
+  useEffect(()=>{
+    socket.on("likeUpdated", ({ post, postId, likes }) => {
+      if (postId === id) {
+        setCurrPost(post);
+        setLikeArr(likes)
+      }
+      socket.off("likeUpdated")
+    }
+  )}
+  ,
+  [setCurrPost,currentPost,likeArr,setLikeArr]
+   
+  );
   useEffect(() => {
     getPosts();
-  }, [currentPost, setCurrPost,currentComments,setCurrentComments]);
+  }, [currentPost, setCurrPost, currentComments, setCurrentComments]);
 
-  const handleCommentCut = async(commentId) =>{
+  const handleCommentCut = async (commentId) => {
     // console.log(id)
-    const response = await axios.delete(`${serverUrl}/api/post/${id}/comment/${commentId}`,{withCredentials:true})
-    console.log(response.data.post)
-    setCurrentComments(response.data.post.comments)
+    const response = await axios.delete(
+      `${serverUrl}/api/post/${id}/comment/${commentId}`,
+      { withCredentials: true },
+    );
+    console.log(response.data.post);
+    setCurrentComments(response.data.post.comments);
     // setCurrentComments(currentComments.filter(comment=>comment._id != commentId))
-  }
-  
+  };
+
   return (
     <div className="w-full bg-white shadow-lg rounded-lg mt-4 mb-6 p-3 sm:p-4 flex flex-col gap-2 md:gap-3">
       {/* Suggested + menu buttons */}
@@ -85,9 +104,9 @@ function Post({ id, post, user, description, postImage, likes, comments }) {
           </div>
         </div>
 
-        <button className="text-blue-600 font-bold px-4 py-1.5 sm:py-2 rounded-lg hover:bg-blue-50 transition whitespace-nowrap text-sm sm:text-base">
-          + follow
-        </button>
+        {user?._id != userData.user?._id && (
+          <FollowButton recieverId={user?._id} />
+        )}
       </div>
 
       {/* Main content text */}
@@ -118,11 +137,14 @@ function Post({ id, post, user, description, postImage, likes, comments }) {
 
       <div className="flex items-center justify-between px-8 border-t border-gray-200 pt-2 mt-1">
         <div className=" h-full w-[50%] flex gap-2 text-gray-600">
-          <div><img 
-            className={`h-5 w-3 sm:h-6 sm:w-6 cursor-pointer `}
-          
-          src="blue-like.png" alt="" /></div>
-          <div>{currentPost.likes?.length ?? 0}</div>
+          <div>
+            <img
+              className={`h-5 w-3 sm:h-6 sm:w-6 cursor-pointer `}
+              src="blue-like.png"
+              alt=""
+            />
+          </div>
+          <div>{likeArr?.length ?? 0}</div>
         </div>
         <div className=" h-full w-[50%] flex gap-2 text-gray-600 justify-end">
           <div>comments</div>
@@ -149,48 +171,55 @@ function Post({ id, post, user, description, postImage, likes, comments }) {
             src="comment.png"
             alt="comment"
             className="h-5 w-3 sm:h-6 sm:w-6"
-            onClick={()=>(setOnComment(prev=>!prev))}
+            onClick={() => setOnComment((prev) => !prev)}
           />
-          <span className="text-xs sm:text-sm font-medium text-gray-700 cursor-pointer"
-            onClick={()=>(setOnComment(prev=>!prev))}
-           >
+          <span
+            className="text-xs sm:text-sm font-medium text-gray-700 cursor-pointer"
+            onClick={() => setOnComment((prev) => !prev)}
+          >
             comment
           </span>
         </button>
       </div>
-     {onComment && <CommentOuter id={id} post = {post}/>}
-     {onComment && <>
-     {currentComments.length !== 0 && <>
-      {currentComments.map((val,idx)=>
-      <div key={idx} className="h-fit py-1 w-full flex flex-col  border-t gap-2">
-        <div className=" w-full px-4 h-fit py-2  flex items-center justify-between ">
-          <div className="w-fit h-fit flex gap-4 items-center ">
-            <img
-            src={userData.user.profileImage || "profile.png"}
-            alt="profile"
-            className="h-8 w-8 sm:h-14 sm:w-14 rounded-full cursor-pointer object-cover"
-          />
-          <div className="font-semibold">{val.user.firstName} {val.user.lastName}</div>
-          </div>
-        <div>
-           <img
-            src="cut.png"
-            alt="cut"
-            className="h-[4vh] w-[4vh] p-2 rounded-full hover:bg-gray-200 cursor-pointer"
-            onClick={()=>handleCommentCut(val._id)}
-          />
-        </div>
-        </div>
-        <div className=" w-full h-fit py-2 px-8">
-          {val.content}
-        </div>
-      </div>)}
-     </>} 
-     </>}
+      {onComment && <CommentOuter id={id} post={post} />}
+      {onComment && (
+        <>
+          {currentComments.length !== 0 && (
+            <>
+              {currentComments.map((val, idx) => (
+                <div
+                  key={idx}
+                  className="h-fit py-1 w-full flex flex-col  border-t gap-2"
+                >
+                  <div className=" w-full px-4 h-fit py-2  flex items-center justify-between ">
+                    <div className="w-fit h-fit flex gap-4 items-center ">
+                      <img
+                        src={userData.user.profileImage || "profile.png"}
+                        alt="profile"
+                        className="h-8 w-8 sm:h-14 sm:w-14 rounded-full cursor-pointer object-cover"
+                      />
+                      <div className="font-semibold">
+                        {val.user.firstName} {val.user.lastName}
+                      </div>
+                    </div>
+                    <div>
+                      <img
+                        src="cut.png"
+                        alt="cut"
+                        className="h-[4vh] w-[4vh] p-2 rounded-full hover:bg-gray-200 cursor-pointer"
+                        onClick={() => handleCommentCut(val._id)}
+                      />
+                    </div>
+                  </div>
+                  <div className=" w-full h-fit py-2 px-8">{val.content}</div>
+                </div>
+              ))}
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 }
-
-
 
 export default Post;

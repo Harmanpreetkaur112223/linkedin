@@ -13,3 +13,9 @@ index.js
 # connect to the database and then make the server listen to the app
 
 mkdir frontend
+
+
+# SOCKET.IO :- to establish two way communication
+create the server using http 
+import server from socket.io
+then create a server using soket io and http server

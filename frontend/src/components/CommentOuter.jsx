@@ -2,6 +2,11 @@ import React, { useContext, useState } from 'react'
 import { UserContextData } from '../context/UserProvider';
 import axios from 'axios';
 import { AuthContextData } from '../context/AuthContext';
+import { io } from 'socket.io-client';
+import { useEffect } from 'react';
+
+
+let socket = io("http://localhost:3000",{withCredentials:true});
 
 function CommentOuter({id , post}) {
       const[commentData , setCommentData] = useState({content:""})
@@ -30,6 +35,14 @@ function CommentOuter({id , post}) {
         console.log("comment error",error)
        }
       };
+      useEffect(()=>{
+        socket.on("commentUpdated",({postId,post})=>{
+          if(id === postId){
+            setCurrPost(post)
+          }
+          socket.off("commentUpdated")
+        })
+      },[setCurrPost,id])
   return (
      <div className="h-fit py-4 mt-2  border border-t-1">
         <div className="h-fit w-full  px-4 py-2 flex items-center gap-2 ">
